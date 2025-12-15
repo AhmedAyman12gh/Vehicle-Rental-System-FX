@@ -3,15 +3,18 @@ package com.vehicle_project;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.control.*;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+// ... other imports ...
+
+
+// import javafx.scene.layout.VBox;
+// import javafx.scene.layout.HBox;
+// import javafx.scene.control.*;
+// import javafx.geometry.Insets;
+// import javafx.geometry.Pos;
+// import javafx.collections.FXCollections;
+// import javafx.collections.ObservableList;
+// import javafx.scene.text.Font;
+// import javafx.scene.text.FontWeight;
 import java.time.LocalDate;
 
 public class Main extends Application {
@@ -86,219 +89,5 @@ public class Main extends Application {
 }
 
 // DataManager class to hold application data
-class DataManager {
-    private static ObservableList<Vehicle> vehicleList = FXCollections.observableArrayList();
-    private static ObservableList<Booking> bookingList = FXCollections.observableArrayList();
-    private static ObservableList<Customer> customerList = FXCollections.observableArrayList();
-    private static ObservableList<Admin> adminList = FXCollections.observableArrayList();
-    private static ObservableList<Payment> paymentList = FXCollections.observableArrayList();
-    
-    public static ObservableList<Vehicle> getVehicleList() {
-        return vehicleList;
-    }
-    
-    public static ObservableList<Booking> getBookingList() {
-        return bookingList;
-    }
-    
-    public static ObservableList<Customer> getCustomerList() {
-        return customerList;
-    }
-    
-    public static ObservableList<Admin> getAdminList() {
-        return adminList;
-    }
-    
-    public static ObservableList<Payment> getPaymentList() {
-        return paymentList;
-    }
-}
 
-// Enhanced LoginView
-class LoginView extends VBox {
-    
-    public LoginView() {
-        setAlignment(Pos.CENTER);
-        setSpacing(20);
-        setPadding(new Insets(30));
-        setStyle("-fx-background-color: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);");
-        
-        // Main container with white background
-        VBox mainContainer = new VBox(20);
-        mainContainer.setAlignment(Pos.CENTER);
-        mainContainer.setPadding(new Insets(40));
-        mainContainer.setMaxWidth(350);
-        mainContainer.setStyle("-fx-background-color: white; -fx-background-radius: 10; " +
-                              "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);");
-        
-        // Title
-        Label titleLabel = new Label("Vehicle Rental System");
-        titleLabel.setFont(Font.font("System", FontWeight.BOLD, 24));
-        titleLabel.setStyle("-fx-text-fill: #667eea;");
-        
-        // Subtitle
-        Label subtitleLabel = new Label("Welcome! Please login to continue");
-        subtitleLabel.setFont(Font.font("System", 13));
-        subtitleLabel.setStyle("-fx-text-fill: #666;");
-        
-        // Separator
-        Separator separator1 = new Separator();
-        separator1.setPrefWidth(300);
-        
-        // Email field
-        Label emailLabel = new Label("Email Address");
-        emailLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
-        emailLabel.setStyle("-fx-text-fill: #333;");
-        
-        TextField emailField = new TextField();
-        emailField.setPromptText("Enter your email");
-        emailField.setPrefWidth(300);
-        emailField.setStyle("-fx-font-size: 13; -fx-padding: 10;");
-        
-        // Role selection
-        Label roleLabel = new Label("Select Your Role");
-        roleLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
-        roleLabel.setStyle("-fx-text-fill: #333;");
-        
-        ToggleGroup roleGroup = new ToggleGroup();
-        RadioButton customerRadio = new RadioButton("Customer");
-        RadioButton adminRadio = new RadioButton("Administrator");
-        customerRadio.setToggleGroup(roleGroup);
-        adminRadio.setToggleGroup(roleGroup);
-        customerRadio.setSelected(true);
-        customerRadio.setStyle("-fx-font-size: 12;");
-        adminRadio.setStyle("-fx-font-size: 12;");
-        
-        HBox roleBox = new HBox(30);
-        roleBox.setAlignment(Pos.CENTER);
-        roleBox.getChildren().addAll(customerRadio, adminRadio);
-        
-        // Login button
-        Button loginBtn = new Button("LOGIN");
-        loginBtn.setPrefWidth(300);
-        loginBtn.setPrefHeight(40);
-        loginBtn.setStyle("-fx-background-color: #667eea; -fx-text-fill: white; " +
-                         "-fx-font-weight: bold; -fx-font-size: 14; -fx-cursor: hand; " +
-                         "-fx-background-radius: 5;");
-        
-        // Hover effect
-        loginBtn.setOnMouseEntered(e -> 
-            loginBtn.setStyle("-fx-background-color: #764ba2; -fx-text-fill: white; " +
-                            "-fx-font-weight: bold; -fx-font-size: 14; -fx-cursor: hand; " +
-                            "-fx-background-radius: 5;"));
-        loginBtn.setOnMouseExited(e -> 
-            loginBtn.setStyle("-fx-background-color: #667eea; -fx-text-fill: white; " +
-                            "-fx-font-weight: bold; -fx-font-size: 14; -fx-cursor: hand; " +
-                            "-fx-background-radius: 5;"));
-        
-        loginBtn.setOnAction(e -> {
-            String email = emailField.getText().trim();
-            
-            if (email.isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Login Failed", "Please enter your email.");
-                return;
-            }
-            
-            if (customerRadio.isSelected()) {
-                // Try to find existing customer
-                Customer customer = DataManager.getCustomerList().stream()
-                    .filter(c -> c.getEmail().equalsIgnoreCase(email))
-                    .findFirst()
-                    .orElse(null);
-                
-                if (customer == null) {
-                    // Create new customer
-                    String name = email.split("@")[0].replace(".", " ");
-                    name = name.substring(0, 1).toUpperCase() + name.substring(1);
-                    customer = new Customer(name, email);
-                    DataManager.getCustomerList().add(customer);
-                    showAlert(Alert.AlertType.INFORMATION, "Welcome", 
-                             "New customer account created!\nWelcome, " + name + "!");
-                }
-                
-                Main.showCustomerView(customer);
-                
-            } else {
-                // Admin login
-                Admin admin = DataManager.getAdminList().stream()
-                    .filter(a -> a.getEmail().equalsIgnoreCase(email))
-                    .findFirst()
-                    .orElse(null);
-                
-                if (admin == null) {
-                    showAlert(Alert.AlertType.ERROR, "Login Failed", 
-                             "Admin account not found.\n\nUse: admin@email.com");
-                    return;
-                }
-                
-                Main.showAdminView(admin);
-            }
-        });
-        
-        // Separator
-        Separator separator2 = new Separator();
-        separator2.setPrefWidth(300);
-        
-        // Quick login section
-        Label quickLabel = new Label("Quick Access (For Testing)");
-        quickLabel.setFont(Font.font("System", FontWeight.BOLD, 11));
-        quickLabel.setStyle("-fx-text-fill: #999;");
-        
-        HBox quickBox = new HBox(10);
-        quickBox.setAlignment(Pos.CENTER);
-        
-        Button quickCustomerBtn = new Button("Demo Customer");
-        quickCustomerBtn.setPrefWidth(140);
-        quickCustomerBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; " +
-                                 "-fx-font-size: 11; -fx-cursor: hand; -fx-background-radius: 3;");
-        quickCustomerBtn.setOnAction(e -> {
-            if (!DataManager.getCustomerList().isEmpty()) {
-                Main.showCustomerView(DataManager.getCustomerList().get(0));
-            }
-        });
-        
-        Button quickAdminBtn = new Button("Demo Admin");
-        quickAdminBtn.setPrefWidth(140);
-        quickAdminBtn.setStyle("-fx-background-color: #FF9800; -fx-text-fill: white; " +
-                              "-fx-font-size: 11; -fx-cursor: hand; -fx-background-radius: 3;");
-        quickAdminBtn.setOnAction(e -> {
-            if (!DataManager.getAdminList().isEmpty()) {
-                Main.showAdminView(DataManager.getAdminList().get(0));
-            }
-        });
-        
-        quickBox.getChildren().addAll(quickCustomerBtn, quickAdminBtn);
-        
-        // Test info
-        Label infoLabel = new Label("Admin Email: admin@email.com\nCustomer: Any email works!");
-        infoLabel.setFont(Font.font("System", 10));
-        infoLabel.setStyle("-fx-text-fill: #999; -fx-text-alignment: center;");
-        infoLabel.setWrapText(true);
-        infoLabel.setMaxWidth(280);
-        
-        mainContainer.getChildren().addAll(
-            titleLabel,
-            subtitleLabel,
-            separator1,
-            emailLabel,
-            emailField,
-            roleLabel,
-            roleBox,
-            loginBtn,
-            separator2,
-            quickLabel,
-            quickBox,
-            infoLabel
-        );
-        
-        getChildren().add(mainContainer);
-    }
-    
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-}
+
