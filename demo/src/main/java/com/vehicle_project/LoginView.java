@@ -260,31 +260,34 @@ public class LoginView extends VBox {
      * 
      * <p>If validation fails, displays an error alert to the user.</p>
      */
-    private void handleLogin() {
-        // Step 1: Retrieve and trim input values
-        String name = nameField.getText().trim();
-        String email = emailField.getText().trim();
+    // private void handleLogin() {
+    //     // Step 1: Retrieve and trim input values
+    //     String name = nameField.getText().trim();
+    //     String email = emailField.getText().trim();
         
-        // Step 2: Validate inputs - check for empty fields
-        if (name.isEmpty() || email.isEmpty()) {
-            showValidationError();
-            return; // Exit method if validation fails
-        }
+    //     // Step 2: Validate inputs - check for empty fields
+    //     if (name.isEmpty() || email.isEmpty()) {
+    //         showValidationError();
+    //         return; // Exit method if validation fails
+    //     }
         
-        // Step 3: Determine user role based on checkbox state
-        boolean isAdmin = adminCheckBox.isSelected();
+    //     // Step 3: Determine user role based on checkbox state
+    //     boolean isAdmin = adminCheckBox.isSelected();
         
-        // Step 4: Create user object and navigate to appropriate view
-        if (isAdmin) {
-            // Create Admin user and show admin view
-            Admin admin = new Admin(name, email);
-            Main.showAdminView(admin);
-        } else {
-            // Create Customer user and show customer view
-            Customer customer = new Customer(name, email);
-            Main.showCustomerView(customer);
-        }
-    }
+    //     // Step 4: Create user object and navigate to appropriate view
+    //     if (isAdmin) {
+    //         // Create Admin user and show admin view
+    //         Admin admin = new Admin(name, email);
+    //         Main.showAdminView(admin);
+    //     } else {
+    //         // Create Customer user and show customer view
+    //         Customer customer = new Customer(name, email);
+    //         Main.showCustomerView(customer);
+    //     }
+    // }
+    
+
+
     
     /**
      * Displays a validation error alert when required fields are empty.
@@ -326,4 +329,54 @@ public class LoginView extends VBox {
     public void requestFocusOnNameField() {
         nameField.requestFocus();
     }
+
+    private void handleLogin() {
+        // Step 1: Retrieve and trim input values
+        String name = nameField.getText().trim();
+        String email = emailField.getText().trim();
+        
+        // Step 2: Validate inputs
+        if (name.isEmpty() || email.isEmpty()) {
+            showValidationError();
+            return;
+        }
+        
+        boolean isAdmin = adminCheckBox.isSelected();
+        
+        if (isAdmin) {
+            // Check if Admin exists in DataManager, otherwise create new
+            Admin admin = null;
+            for (Admin a : DataManager.getAdminList()) {
+                if (a.getEmail().equalsIgnoreCase(email)) {
+                    admin = a;
+                    break;
+                }
+            }
+            
+            if (admin == null) {
+                admin = new Admin(name, email);
+                DataManager.getAdminList().add(admin);
+            }
+            
+            Main.showAdminView(admin);
+            
+        } else {
+            // Check if Customer exists in DataManager
+            Customer customer = null;
+            for (Customer c : DataManager.getCustomerList()) {
+                if (c.getEmail().equalsIgnoreCase(email)) {
+                    customer = c; // Found existing customer!
+                    break;
+                }
+            }
+            
+            // If not found, create new and add to DataManager
+            if (customer == null) {
+                customer = new Customer(name, email);
+                DataManager.getCustomerList().add(customer);
+            }
+            
+            Main.showCustomerView(customer);
+        }
+ }
 }

@@ -33,4 +33,20 @@ public abstract class User {
     }
 
       public enum UserRole {  ADMIN, CUSTOMER  }
+
+
+      @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        // Compare users based on email (unique identifier)
+        return email != null && email.equalsIgnoreCase(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return email != null ? email.toLowerCase().hashCode() : 0;
+    }
+
 }
