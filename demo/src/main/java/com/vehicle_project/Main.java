@@ -3,18 +3,6 @@ package com.vehicle_project;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-// ... other imports ...
-
-
-// import javafx.scene.layout.VBox;
-// import javafx.scene.layout.HBox;
-// import javafx.scene.control.*;
-// import javafx.geometry.Insets;
-// import javafx.geometry.Pos;
-// import javafx.collections.FXCollections;
-// import javafx.collections.ObservableList;
-// import javafx.scene.text.Font;
-// import javafx.scene.text.FontWeight;
 import java.time.LocalDate;
 
 public class Main extends Application {
@@ -42,6 +30,9 @@ public class Main extends Application {
         LoginView loginView = new LoginView();
         Scene scene = new Scene(loginView, 400, 500);
         primaryStage.setScene(scene);
+        primaryStage.setWidth(400);
+        primaryStage.setHeight(500);
+        primaryStage.centerOnScreen();
         primaryStage.setTitle(APP_TITLE + " - Login");
     }
     
@@ -49,6 +40,9 @@ public class Main extends Application {
         CustomerView customerView = new CustomerView(customer);
         Scene scene = new Scene(customerView, 1000, 600);
         primaryStage.setScene(scene);
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(600);
+        primaryStage.centerOnScreen();
         primaryStage.setTitle(APP_TITLE + " - Customer Portal");
     }
     
@@ -56,6 +50,10 @@ public class Main extends Application {
         AdminView adminView = new AdminView(admin);
         Scene scene = new Scene(adminView, 1100, 650);
         primaryStage.setScene(scene);
+        primaryStage.setWidth(1100);
+        primaryStage.setHeight(650);
+        primaryStage.centerOnScreen();
+        
         primaryStage.setTitle(APP_TITLE + " - Admin Portal");
     }
     
@@ -88,6 +86,6 @@ public class Main extends Application {
     }
 }
 
-// DataManager class to hold application data
+
 
 
