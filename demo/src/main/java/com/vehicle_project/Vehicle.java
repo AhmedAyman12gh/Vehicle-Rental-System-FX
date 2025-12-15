@@ -1,4 +1,4 @@
-
+package com.vehicle_project;
 public abstract class Vehicle implements Rentable, Comparable<Vehicle>  {
     private String vehicleId;      
     private String brand;          
